@@ -26,6 +26,7 @@ export const GameBlock = ({ title, price }) => {
 						//className="active"
 						type.map((type, i) => (
 							<li
+								key={type}
 								onClick={() => setActiveType(i)}
 								className={activeType === i ? 'active' : ''}>
 								{type}
@@ -38,6 +39,7 @@ export const GameBlock = ({ title, price }) => {
 						//className="active"
 						extend.map((extend, i) => (
 							<li
+								key={extend}
 								onClick={() => setActiveExtand(i)}
 								className={activeExtand === i ? 'active' : ''}>
 								{extend}
