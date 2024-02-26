@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 
 export const GameBlock = ({ title, price }) => {
+	const [activeType, setActiveType] = useState(0);
+	const [activeExtand, setActiveExtand] = useState(0);
 	const [count, setCount] = useState(0);
+
+	const type = ['PC', 'PS 5'];
+	const extend = ['Bronze', 'Silver', 'Gold'];
 
 	const onClickAddCount = () => {
 		setCount(count + 1);
@@ -17,13 +22,28 @@ export const GameBlock = ({ title, price }) => {
 			<h4 className="pizza-block__title">{title}</h4>
 			<div className="pizza-block__selector">
 				<ul>
-					<li className="active">PC</li>
-					<li>PS 5</li>
+					{
+						//className="active"
+						type.map((type, i) => (
+							<li
+								onClick={() => setActiveType(i)}
+								className={activeType === i ? 'active' : ''}>
+								{type}
+							</li>
+						))
+					}
 				</ul>
 				<ul>
-					<li className="active">Bronze</li>
-					<li>Silver</li>
-					<li>Gold</li>
+					{
+						//className="active"
+						extend.map((extend, i) => (
+							<li
+								onClick={() => setActiveExtand(i)}
+								className={activeExtand === i ? 'active' : ''}>
+								{extend}
+							</li>
+						))
+					}
 				</ul>
 			</div>
 			<div className="pizza-block__bottom">
