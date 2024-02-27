@@ -4,8 +4,30 @@ import { Header } from './components/Header/Header';
 import { Categories } from './components/Categories/Categories';
 import { Sort } from './components/Sort/Sort';
 import { GameBlock } from './components/GameBlock/GameBlock';
+import { useEffect, useState } from 'react';
 
 function App() {
+	//https://e7feb94fe973f168.mokky.dev/items
+	const [items, setItems] = useState([]);
+
+	useEffect(() => {
+		fetch('https://e7feb94fe973f168.mokky.dev/items')
+			.then((res) => {
+				//в джейсон
+				return res.json();
+			})
+			.then((arr) => {
+				setItems(arr);
+			}); //используем джейсон
+	}, []);
+
+	// fetch('https://e7feb94fe973f168.mokky.dev/items')
+	// 	.then((res) => {
+	// 		//в джейсон
+	// 		return res.json();
+	// 	})
+	// 	.then((arr) => {}); //используем джейсон
+
 	return (
 		<div className="wrapper">
 			<Header />
@@ -17,11 +39,18 @@ function App() {
 					</div>
 					<h2 className="content__title">Все игры</h2>
 					<div className="content__items">
-						<GameBlock title={'GTA VI'} price={4990} />
-						<GameBlock title={'GTA V'} price={3990} />
-						<GameBlock title={'GTA IV'} price={2990} />
-						<GameBlock title={'GTA III'} price={1990} />
-						<GameBlock title={'GTA II'} price={990} />
+						{items.map((item) => (
+							<GameBlock
+								title={item.title}
+								price={item.price}
+								id={item.id}
+								imgUrl={item.imgUrl}
+								types={item.types}
+								editions={item.editions}
+								category={item.category}
+								rating={item.rating}
+							/>
+						))}
 					</div>
 				</div>
 			</div>

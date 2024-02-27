@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 
-export const GameBlock = ({ title, price }) => {
+export const GameBlock = ({
+	title,
+	price,
+	id,
+	imgUrl,
+	types,
+	editions,
+	category,
+	rating,
+}) => {
 	const [activeType, setActiveType] = useState(0);
 	const [activeExtand, setActiveExtand] = useState(0);
 	const [count, setCount] = useState(0);
-
-	const type = ['PC', 'PS 5'];
-	const extend = ['Bronze', 'Silver', 'Gold'];
 
 	const onClickAddCount = () => {
 		setCount(count + 1);
@@ -16,15 +22,16 @@ export const GameBlock = ({ title, price }) => {
 		<div className="pizza-block">
 			<img
 				className="pizza-block__image"
-				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZEJazxOBtzD2xGs-Tu3OaPjuK7P8wGk6Q3g&usqp=CAU"
-				alt="Pizza"
+				src={imgUrl}
+				alt="Game"
+				
 			/>
 			<h4 className="pizza-block__title">{title}</h4>
 			<div className="pizza-block__selector">
 				<ul>
 					{
 						//className="active"
-						type.map((type, i) => (
+						types.map((type, i) => (
 							<li
 								key={type}
 								onClick={() => setActiveType(i)}
@@ -37,12 +44,12 @@ export const GameBlock = ({ title, price }) => {
 				<ul>
 					{
 						//className="active"
-						extend.map((extend, i) => (
+						editions.map((editions, i) => (
 							<li
-								key={extend}
+								key={editions}
 								onClick={() => setActiveExtand(i)}
 								className={activeExtand === i ? 'active' : ''}>
-								{extend}
+								{editions}
 							</li>
 						))
 					}
