@@ -19,15 +19,15 @@ export const GameBlock = ({
 	};
 
 	return (
-		<div className="pizza-block">
+		<div className="game-block">
 			<img
-				className="pizza-block__image"
+				className="game-block__image"
 				src={imgUrl}
 				alt="Game"
 				
 			/>
-			<h4 className="pizza-block__title">{title}</h4>
-			<div className="pizza-block__selector">
+			<h4 className="game-block__title">{title}</h4>
+			<div className="game-block__selector">
 				<ul>
 					{
 						//className="active"
@@ -55,8 +55,8 @@ export const GameBlock = ({
 					}
 				</ul>
 			</div>
-			<div className="pizza-block__bottom">
-				<div className="pizza-block__price">от {price} ₽</div>
+			<div className="game-block__bottom">
+				<div className="game-block__price">от {price} ₽</div>
 				<button
 					className="button button--outline button--add"
 					onClick={onClickAddCount}>
