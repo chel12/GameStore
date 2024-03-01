@@ -9,8 +9,22 @@ const Home = () => {
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	//категории
+	const [valueCategories, setValueCategories] = useState(0);
+
+	//сортировка
+	const [valueSort, setValueSort] = useState({
+		name: 'популярности',
+		sortProperty: 'rating',
+	});
+
 	useEffect(() => {
-		fetch('https://e7feb94fe973f168.mokky.dev/items')
+		setIsLoading(true);
+		fetch(
+			`https://e7feb94fe973f168.mokky.dev/items?${
+				valueCategories > 0 ? `category=${valueCategories}` : ''
+			}&sortBy=${valueSort.sortProperty}`
+		)
 			.then((res) => {
 				//в джейсон
 				return res.json();
@@ -20,13 +34,20 @@ const Home = () => {
 				setIsLoading(false);
 			}); //используем джейсон
 		window.scrollTo(0, 0);
-	}, []);
+	}, [valueCategories, valueSort]);
+
 	return (
 		<>
 			<div className="container">
 				<div className="content__top">
-					<Categories />
-					<Sort />
+					<Categories
+						valueCategories={valueCategories}
+						setValueCategories={(i) => setValueCategories(i)}
+					/>
+					<Sort
+						valueSort={valueSort}
+						setValueSort={(i) => setValueSort(i)}
+					/>
 				</div>
 				<h2 className="content__title">Все игры</h2>
 				<div className="content__items">
