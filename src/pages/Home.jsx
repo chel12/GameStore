@@ -18,16 +18,19 @@ const Home = ({ searchValue, setSearchValue }) => {
 		sortProperty: 'rating',
 	});
 
+	//поиск для статики. переделал на запрос с бекенда
 	const filteredItem = items.filter((item) =>
 		item.title.toLowerCase().includes(searchValue.toLowerCase())
 	);
+
+	const search = searchValue ? `&title=*${searchValue}` : '';
 
 	useEffect(() => {
 		setIsLoading(true);
 		fetch(
 			`https://e7feb94fe973f168.mokky.dev/items?${
 				valueCategories > 0 ? `category=${valueCategories}` : ''
-			}&sortBy=${valueSort.sortProperty}`
+			}&sortBy=${valueSort.sortProperty}${search}`
 		)
 			.then((res) => {
 				//в джейсон
@@ -38,7 +41,7 @@ const Home = ({ searchValue, setSearchValue }) => {
 				setIsLoading(false);
 			}); //используем джейсон
 		window.scrollTo(0, 0);
-	}, [valueCategories, valueSort]);
+	}, [valueCategories, valueSort, searchValue]);
 
 	return (
 		<>
@@ -59,7 +62,7 @@ const Home = ({ searchValue, setSearchValue }) => {
 						? [...new Array(8)].map((_, index) => (
 								<GameBlockSkeleton key={index} />
 						  ))
-						: filteredItem.map((item) =>
+						: items.map((item) =>
 								isLoading ? (
 									<GameBlockSkeleton />
 								) : (
