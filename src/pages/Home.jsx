@@ -4,8 +4,11 @@ import { Categories } from '../components/Categories/Categories';
 import { Sort } from '../components/Sort/Sort';
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
+import Pagination from '../components/Pagination/Pagination';
+import { useContext } from 'react';
+import { AppContext } from '../App';
 
-const Home = ({ searchValue, setSearchValue }) => {
+const Home = () => {
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -17,11 +20,12 @@ const Home = ({ searchValue, setSearchValue }) => {
 		name: 'популярности',
 		sortProperty: 'rating',
 	});
-
+	const { searchValue } = useContext(AppContext);
+	const [currentPage, setCurrentPage] = useState(1);
 	//поиск для статики. переделал на запрос с бекенда
-	const filteredItem = items.filter((item) =>
-		item.title.toLowerCase().includes(searchValue.toLowerCase())
-	);
+	// const filteredItem = items.filter((item) =>
+	// 	item.title.toLowerCase().includes(searchValue.toLowerCase())
+	// );
 
 	const search = searchValue ? `&title=*${searchValue}` : '';
 
@@ -79,6 +83,7 @@ const Home = ({ searchValue, setSearchValue }) => {
 								)
 						  )}
 				</div>
+				<Pagination />
 			</div>
 		</>
 	);

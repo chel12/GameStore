@@ -1,0 +1,42 @@
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	li {
+		display: inline-block;
+
+		a {
+			cursor: pointer;
+			font-size: 18px;
+			width: 40px;
+			height: 40px;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			border: 2px solid rgb(58, 48, 178);
+			border-radius: 30px;
+			margin-right: 10px;
+			opacity: 0.6;
+			transition: all 0.2s ease-in-out;
+			&:hover {
+				background: rgb(58, 48, 178, 0.6);
+				border: none;
+				opacity: 1;
+				a {
+					color: aliceblue;
+				}
+			}
+		}
+	}
+	:global {
+		.selected {
+			a {
+				opacity: 1;
+				background: rgb(58, 48, 178, 0.6);
+				border: none;
+				color: #fff;
+			}
+		}
+	}
+}
