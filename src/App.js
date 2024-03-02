@@ -5,23 +5,35 @@ import NotFound from './pages/NotFound';
 
 import './scss/app.scss';
 import { Cart } from './pages/Cart';
+import { createContext, useState } from 'react';
+
+export const AppContext = createContext({});
 
 function App() {
 	//https://e7feb94fe973f168.mokky.dev/items
+	const [searchValue, setSearchValue] = useState('');
 
 	return (
-		<div className="wrapper">
-			<Header />
-			<div className="content">
-				
+		<AppContext.Provider value={{ searchValue, setSearchValue }}>
+			<div className="wrapper">
+				<Header />
+				<div className="content">
 					<Routes>
-						<Route path="/" element={<Home />} />
+						<Route
+							path="/"
+							element={
+								<Home
+									searchValue={searchValue}
+									setSearchValue={setSearchValue}
+								/>
+							}
+						/>
 						<Route path="/cart" element={<Cart />} />
 						<Route path="*" element={<NotFound />} />
 					</Routes>
-				
+				</div>
 			</div>
-		</div>
+		</AppContext.Provider>
 	);
 }
 

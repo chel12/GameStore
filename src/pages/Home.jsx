@@ -5,7 +5,7 @@ import { Sort } from '../components/Sort/Sort';
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
 
-const Home = () => {
+const Home = ({ searchValue, setSearchValue }) => {
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -17,6 +17,10 @@ const Home = () => {
 		name: 'популярности',
 		sortProperty: 'rating',
 	});
+
+	const filteredItem = items.filter((item) =>
+		item.title.toLowerCase().includes(searchValue.toLowerCase())
+	);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -55,7 +59,7 @@ const Home = () => {
 						? [...new Array(8)].map((_, index) => (
 								<GameBlockSkeleton key={index} />
 						  ))
-						: items.map((item) =>
+						: filteredItem.map((item) =>
 								isLoading ? (
 									<GameBlockSkeleton />
 								) : (

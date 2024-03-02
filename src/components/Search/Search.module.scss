@@ -4,14 +4,14 @@
 .input {
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	padding: 15px 20px;
-	width: 200px;
+	width: 300px;
 	border-radius: 10px;
 	font-size: 18px;
 	padding-left: 50px;
 	transition: all 0.25s ease-in-out;
 	&:focus {
 		border: 1px solid rgba(0, 0, 0, 0.3);
-		width: 500px;
+		width: 400px;
 	}
 }
 .icon {
@@ -21,4 +21,14 @@
 	position: absolute;
 	left: 15px;
 	top: 15px;
+}
+.clear {
+	cursor: pointer;
+	position: absolute;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	opacity: 0.5;
+	right: 16px;
+	top: 20px;
 }
