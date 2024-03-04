@@ -11,11 +11,11 @@ import { AppContext } from '../App';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryId } from '../redux/slices/filterSlice';
+import axios from 'axios';
 
 const Home = () => {
 	//селекторы для редакса
-	const categoryId = useSelector((state) => state.filter.categoryId);
-	const sort = useSelector((state) => state.filter.sort);
+	const { categoryId, sort } = useSelector((state) => state.filter);
 
 	//
 	//диспатч
@@ -44,19 +44,30 @@ const Home = () => {
 
 	useEffect(() => {
 		setIsLoading(true);
-		fetch(
-			`https://e7feb94fe973f168.mokky.dev/items?${
-				categoryId > 0 ? `category=${categoryId}` : ''
-			}&sortBy=${sort.sortProperty}${search}`
-		)
+		// fetch(
+		// 	`https://e7feb94fe973f168.mokky.dev/items?${
+		// 		categoryId > 0 ? `category=${categoryId}` : ''
+		// 	}&sortBy=${sort.sortProperty}${search}`
+		// )
+		// 	.then((res) => {
+		// 		//в джейсон
+		// 		return res.json();
+		// 	})
+		// 	.then((arr) => {
+		// 		setItems(arr);
+		// 		setIsLoading(false);
+		// 	}); //используем джейсон
+		//заменили на аксиос
+		axios
+			.get(
+				`https://e7feb94fe973f168.mokky.dev/items?${
+					categoryId > 0 ? `category=${categoryId}` : ''
+				}&sortBy=${sort.sortProperty}${search}`
+			)
 			.then((res) => {
-				//в джейсон
-				return res.json();
-			})
-			.then((arr) => {
-				setItems(arr);
+				setItems(res.data);
 				setIsLoading(false);
-			}); //используем джейсон
+			});
 		window.scrollTo(0, 0);
 	}, [categoryId, sort, searchValue]);
 

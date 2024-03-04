@@ -1,9 +1,19 @@
 import React, { useContext } from 'react';
+import { useRef } from 'react';
 import { AppContext } from '../../App';
+import debounce from 'lodash.debounce';
+
 import styles from './Search.module.scss';
 
 export const Search = () => {
 	const { searchValue, setSearchValue } = useContext(AppContext);
+
+	const onClickClear = () => {
+		setSearchValue('');
+		inputRef.current.focus();
+	};
+
+	const inputRef = useRef();
 	return (
 		<div className={styles.container}>
 			<svg
@@ -25,6 +35,7 @@ export const Search = () => {
 				<circle cx="10" cy="10" r="6" />
 			</svg>
 			<input
+				ref={inputRef}
 				value={searchValue}
 				onChange={(e) => setSearchValue(e.target.value)}
 				className={styles.input}
@@ -32,7 +43,7 @@ export const Search = () => {
 			/>
 			{searchValue && (
 				<svg
-					onClick={() => setSearchValue('')}
+					onClick={onClickClear}
 					className={styles.clear}
 					xmlns="http://www.w3.org/2000/svg"
 					height="48"
