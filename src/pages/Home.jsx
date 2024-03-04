@@ -1,27 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
 import { Sort } from '../components/Sort/Sort';
+
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
+
 import Pagination from '../components/Pagination/Pagination';
-import { useContext } from 'react';
 import { AppContext } from '../App';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setCategoryId } from '../redux/slices/filterSlice';
+
 const Home = () => {
+	//селекторы для редакса
+	const categoryId = useSelector((state) => state.filter.categoryId);
+	//
+	//диспатч
+	const dispatch = useDispatch();
+	//
+
+
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	//категории
-	const [valueCategories, setValueCategories] = useState(0);
-
+	// const [valueCategories, setValueCategories] = useState(0);
 	//сортировка
 	const [valueSort, setValueSort] = useState({
 		name: 'популярности',
 		sortProperty: 'rating',
 	});
+
 	const { searchValue } = useContext(AppContext);
-	const [currentPage, setCurrentPage] = useState(1);
+	//const [currentPage, setCurrentPage] = useState(1);
 	//поиск для статики. переделал на запрос с бекенда
 	// const filteredItem = items.filter((item) =>
 	// 	item.title.toLowerCase().includes(searchValue.toLowerCase())
@@ -29,11 +41,15 @@ const Home = () => {
 
 	const search = searchValue ? `&title=*${searchValue}` : '';
 
+	const onChangeCategory = (id) => {
+		dispatch(setCategoryId(id));
+	};
+
 	useEffect(() => {
 		setIsLoading(true);
 		fetch(
 			`https://e7feb94fe973f168.mokky.dev/items?${
-				valueCategories > 0 ? `category=${valueCategories}` : ''
+				categoryId > 0 ? `category=${categoryId}` : ''
 			}&sortBy=${valueSort.sortProperty}${search}`
 		)
 			.then((res) => {
@@ -45,15 +61,15 @@ const Home = () => {
 				setIsLoading(false);
 			}); //используем джейсон
 		window.scrollTo(0, 0);
-	}, [valueCategories, valueSort, searchValue]);
+	}, [categoryId, valueSort, searchValue]);
 
 	return (
 		<>
 			<div className="container">
 				<div className="content__top">
 					<Categories
-						valueCategories={valueCategories}
-						setValueCategories={(i) => setValueCategories(i)}
+						categoryId={categoryId}
+						onChangeCategory={(i) => onChangeCategory(i)}
 					/>
 					<Sort
 						valueSort={valueSort}

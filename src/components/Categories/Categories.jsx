@@ -1,5 +1,5 @@
 
-export const Categories = ({ valueCategories, setValueCategories }) => {
+export const Categories = ({ categoryId, onChangeCategory }) => {
 	// const onClickCategory = (index) => {  вариант для сложных
 	// 	setActiveIndex(index);
 	//   ...
@@ -23,8 +23,8 @@ export const Categories = ({ valueCategories, setValueCategories }) => {
 				{categories.map((li, index) => (
 					<li
 						key={index}
-						onClick={() => setValueCategories(index)}
-						className={valueCategories === index ? 'active' : ''}>
+						onClick={() => onChangeCategory(index)}
+						className={categoryId === index ? 'active' : ''}>
 						{li}
 					</li>
 				))}

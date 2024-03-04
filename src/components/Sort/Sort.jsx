@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Sort = ({ valueSort, setValueSort }) => {
+	const dispatch = useDispatch();
+	const sort = useSelector((state) => state.filter.sort);
+
 	const list = [
 		{
 			name: `популярности ˄`,
@@ -53,7 +57,7 @@ export const Sort = ({ valueSort, setValueSort }) => {
 					onClick={() => {
 						setOpen(!open);
 					}}>
-					{valueSort.name}
+					{sort.name}
 				</span>
 			</div>
 			{open && (
@@ -64,7 +68,7 @@ export const Sort = ({ valueSort, setValueSort }) => {
 								key={obj.name}
 								onClick={() => onClickListItem(obj)}
 								className={
-									valueSort.sortProperty === obj.sortProperty
+									sort.sortProperty === obj.sortProperty
 										? 'active'
 										: ''
 								}>

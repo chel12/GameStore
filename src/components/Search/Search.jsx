@@ -9,15 +9,15 @@ export const Search = () => {
 			<svg
 				className={styles.icon}
 				xmlns="http://www.w3.org/2000/svg"
-				aria-labelledby="searchIconTitle"
+				ariaLabelledby="searchIconTitle"
 				color="#2329D6"
 				fill="none"
 				height="48px"
 				role="img"
 				stroke="#2329D6"
-				stroke-linecap="square"
-				stroke-linejoin="miter"
-				stroke-width="1"
+				strokeLinecap="square"
+				strokeLinejoin="miter"
+				strokeWidth="1"
 				viewBox="0 0 24 24"
 				width="48px">
 				<title id="searchIconTitle" />
@@ -29,13 +29,10 @@ export const Search = () => {
 				onChange={(e) => setSearchValue(e.target.value)}
 				className={styles.input}
 				placeholder="Поиск... "
-				
 			/>
 			{searchValue && (
 				<svg
-					onClick={() => 
-						setSearchValue('')
-					}
+					onClick={() => setSearchValue('')}
 					className={styles.clear}
 					xmlns="http://www.w3.org/2000/svg"
 					height="48"
