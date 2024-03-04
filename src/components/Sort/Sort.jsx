@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setSort } from '../../redux/slices/filterSlice';
 
-export const Sort = ({ valueSort, setValueSort }) => {
+export const Sort = () => {
 	const dispatch = useDispatch();
 	const sort = useSelector((state) => state.filter.sort);
 
@@ -35,7 +36,7 @@ export const Sort = ({ valueSort, setValueSort }) => {
 	const [open, setOpen] = useState(false);
 
 	const onClickListItem = (i) => {
-		setValueSort(i);
+		dispatch(setSort(i));
 		setOpen(!open);
 	};
 

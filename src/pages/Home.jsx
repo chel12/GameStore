@@ -15,11 +15,12 @@ import { setCategoryId } from '../redux/slices/filterSlice';
 const Home = () => {
 	//селекторы для редакса
 	const categoryId = useSelector((state) => state.filter.categoryId);
+	const sort = useSelector((state) => state.filter.sort);
+
 	//
 	//диспатч
 	const dispatch = useDispatch();
 	//
-
 
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -27,10 +28,6 @@ const Home = () => {
 	//категории
 	// const [valueCategories, setValueCategories] = useState(0);
 	//сортировка
-	const [valueSort, setValueSort] = useState({
-		name: 'популярности',
-		sortProperty: 'rating',
-	});
 
 	const { searchValue } = useContext(AppContext);
 	//const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +47,7 @@ const Home = () => {
 		fetch(
 			`https://e7feb94fe973f168.mokky.dev/items?${
 				categoryId > 0 ? `category=${categoryId}` : ''
-			}&sortBy=${valueSort.sortProperty}${search}`
+			}&sortBy=${sort.sortProperty}${search}`
 		)
 			.then((res) => {
 				//в джейсон
@@ -61,7 +58,7 @@ const Home = () => {
 				setIsLoading(false);
 			}); //используем джейсон
 		window.scrollTo(0, 0);
-	}, [categoryId, valueSort, searchValue]);
+	}, [categoryId, sort, searchValue]);
 
 	return (
 		<>
@@ -71,10 +68,7 @@ const Home = () => {
 						categoryId={categoryId}
 						onChangeCategory={(i) => onChangeCategory(i)}
 					/>
-					<Sort
-						valueSort={valueSort}
-						setValueSort={(i) => setValueSort(i)}
-					/>
+					<Sort />
 				</div>
 				<h2 className="content__title">Все игры</h2>
 				<div className="content__items">
