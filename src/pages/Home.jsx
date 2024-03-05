@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
 import { Sort } from '../components/Sort/Sort';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
@@ -14,8 +16,10 @@ import { setCategoryId, setPageCount } from '../redux/slices/filterSlice';
 import axios from 'axios';
 
 const Home = () => {
+	const navigate = useNavigate();
+
 	//селекторы для редакса
-	const { categoryId, sort, pageCount } = useSelector(
+	const { categoryId, sort, currentPage } = useSelector(
 		(state) => state.filter
 	);
 	//диспатч
@@ -39,22 +43,16 @@ const Home = () => {
 	const category = categoryId > 0 ? `category=${categoryId}` : '';
 	const search = searchValue ? `&title=*${searchValue}` : '';
 
+	//вытащить теперь строку из url и перевести её в обьект
+	useEffect(() => {
+		if (window.location.search) {
+			//получить из обьект
+			const params = qs.parse(window.location.search.substring(1));
+		}
+	}, []);
+
 	useEffect(() => {
 		setIsLoading(true);
-		// fetch(
-		// 	`https://e7feb94fe973f168.mokky.dev/items?${
-		// 		categoryId > 0 ? `category=${categoryId}` : ''
-		// 	}&sortBy=${sort.sortProperty}${search}`
-		// )
-		// 	.then((res) => {
-		// 		//в джейсон
-		// 		return res.json();
-		// 	})
-		// 	.then((arr) => {
-		// 		setItems(arr);
-		// 		setIsLoading(false);
-		// 	}); //используем джейсон
-		//заменили на аксиос
 		axios
 			.get(
 				`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sort.sortProperty}${search}`
@@ -65,6 +63,31 @@ const Home = () => {
 			});
 		window.scrollTo(0, 0);
 	}, [categoryId, sort.sortProperty, searchValue]);
+
+	useEffect(() => {
+		const queryString = qs.stringify({
+			sortProperty: sort.sortProperty,
+			categoryId,
+		});
+		navigate(`?${queryString}`);
+	}, [categoryId, sort.sortProperty]);
+
+	const skeletonLoader = [...new Array(8)].map((_, index) => (
+		<GameBlockSkeleton key={index} />
+	));
+	const games = items.map((item) => (
+		<GameBlock
+			key={item.title}
+			title={item.title}
+			price={item.price}
+			id={item.id}
+			imgUrl={item.imgUrl}
+			types={item.types}
+			editions={item.editions}
+			category={item.category}
+			rating={item.rating}
+		/>
+	));
 
 	return (
 		<>
@@ -78,29 +101,12 @@ const Home = () => {
 				</div>
 				<h2 className="content__title">Все игры</h2>
 				<div className="content__items">
-					{isLoading
-						? [...new Array(8)].map((_, index) => (
-								<GameBlockSkeleton key={index} />
-						  ))
-						: items.map((item) =>
-								isLoading ? (
-									<GameBlockSkeleton />
-								) : (
-									<GameBlock
-										key={item.title}
-										title={item.title}
-										price={item.price}
-										id={item.id}
-										imgUrl={item.imgUrl}
-										types={item.types}
-										editions={item.editions}
-										category={item.category}
-										rating={item.rating}
-									/>
-								)
-						  )}
+					{isLoading ? skeletonLoader : games}
 				</div>
-				<Pagination value={pageCount} onChangePage={onChangePage} />
+				<Pagination
+					currentPage={currentPage}
+					onChangePage={onChangePage}
+				/>
 			</div>
 		</>
 	);
