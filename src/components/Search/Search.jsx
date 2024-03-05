@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useRef } from 'react';
 import { AppContext } from '../../App';
 import debounce from 'lodash.debounce';
@@ -6,14 +6,29 @@ import debounce from 'lodash.debounce';
 import styles from './Search.module.scss';
 
 export const Search = () => {
-	const { searchValue, setSearchValue } = useContext(AppContext);
+	const { setSearchValue } = useContext(AppContext);
+	const [value, setValue] = useState('');
 
 	const onClickClear = () => {
-		setSearchValue('');
+		setValue(''); //локально очистить
+		setSearchValue(''); // и в запросе очистку(контекст)
 		inputRef.current.focus();
 	};
-
 	const inputRef = useRef();
+
+	const updateSearchValue = useCallback(
+		//отложенная функция
+		debounce((str) => {
+			setSearchValue(str);
+		}, 600),
+		[]
+	);
+
+	const onChangeInput = (e) => {
+		setValue(e.target.value);
+		updateSearchValue(e.target.value);
+	};
+
 	return (
 		<div className={styles.container}>
 			<svg
@@ -36,12 +51,12 @@ export const Search = () => {
 			</svg>
 			<input
 				ref={inputRef}
-				value={searchValue}
-				onChange={(e) => setSearchValue(e.target.value)}
+				value={value}
+				onChange={onChangeInput}
 				className={styles.input}
 				placeholder="Поиск... "
 			/>
-			{searchValue && (
+			{value && (
 				<svg
 					onClick={onClickClear}
 					className={styles.clear}

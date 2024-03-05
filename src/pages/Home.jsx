@@ -10,37 +10,34 @@ import Pagination from '../components/Pagination/Pagination';
 import { AppContext } from '../App';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setPageCount } from '../redux/slices/filterSlice';
 import axios from 'axios';
 
 const Home = () => {
 	//селекторы для редакса
-	const { categoryId, sort } = useSelector((state) => state.filter);
-
-	//
+	const { categoryId, sort, pageCount } = useSelector(
+		(state) => state.filter
+	);
 	//диспатч
 	const dispatch = useDispatch();
-	//
-
+	//стейты
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-
 	//категории
 	// const [valueCategories, setValueCategories] = useState(0);
 	//сортировка
-
 	const { searchValue } = useContext(AppContext);
-	//const [currentPage, setCurrentPage] = useState(1);
-	//поиск для статики. переделал на запрос с бекенда
-	// const filteredItem = items.filter((item) =>
-	// 	item.title.toLowerCase().includes(searchValue.toLowerCase())
-	// );
-
-	const search = searchValue ? `&title=*${searchValue}` : '';
 
 	const onChangeCategory = (id) => {
 		dispatch(setCategoryId(id));
 	};
+
+	const onChangePage = (number) => {
+		dispatch(setPageCount(number));
+	};
+	// для запросов
+	const category = categoryId > 0 ? `category=${categoryId}` : '';
+	const search = searchValue ? `&title=*${searchValue}` : '';
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -60,16 +57,14 @@ const Home = () => {
 		//заменили на аксиос
 		axios
 			.get(
-				`https://e7feb94fe973f168.mokky.dev/items?${
-					categoryId > 0 ? `category=${categoryId}` : ''
-				}&sortBy=${sort.sortProperty}${search}`
+				`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sort.sortProperty}${search}`
 			)
 			.then((res) => {
 				setItems(res.data);
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, [categoryId, sort, searchValue]);
+	}, [categoryId, sort.sortProperty, searchValue]);
 
 	return (
 		<>
@@ -92,6 +87,7 @@ const Home = () => {
 									<GameBlockSkeleton />
 								) : (
 									<GameBlock
+										key={item.title}
 										title={item.title}
 										price={item.price}
 										id={item.id}
@@ -104,7 +100,7 @@ const Home = () => {
 								)
 						  )}
 				</div>
-				<Pagination />
+				<Pagination value={pageCount} onChangePage={onChangePage} />
 			</div>
 		</>
 	);
