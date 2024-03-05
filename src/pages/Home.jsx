@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
-import { Sort } from '../components/Sort/Sort';
+import { Sort, sortList } from '../components/Sort/Sort';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,12 +12,19 @@ import Pagination from '../components/Pagination/Pagination';
 import { AppContext } from '../App';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryId, setPageCount } from '../redux/slices/filterSlice';
+import {
+	setCategoryId,
+	setPageCount,
+	setFilters,
+} from '../redux/slices/filterSlice';
 import axios from 'axios';
 
 const Home = () => {
+	const isSearch = useRef(false);
+	//для проверки, если запрос из url чтобы не получать
+	const isMounted = useRef(false);
+	//для проверки, чтобы не вшивал qs все данные сразу в url при 1 рендере
 	const navigate = useNavigate();
-
 	//селекторы для редакса
 	const { categoryId, sort, currentPage } = useSelector(
 		(state) => state.filter
@@ -40,18 +47,10 @@ const Home = () => {
 		dispatch(setPageCount(number));
 	};
 	// для запросов
-	const category = categoryId > 0 ? `category=${categoryId}` : '';
-	const search = searchValue ? `&title=*${searchValue}` : '';
-
-	//вытащить теперь строку из url и перевести её в обьект
-	useEffect(() => {
-		if (window.location.search) {
-			//получить из обьект
-			const params = qs.parse(window.location.search.substring(1));
-		}
-	}, []);
-
-	useEffect(() => {
+	//отдельная функция для избежания дабл рендеринга
+	const fetchGames = () => {
+		const category = categoryId > 0 ? `category=${categoryId}` : '';
+		const search = searchValue ? `&title=*${searchValue}` : '';
 		setIsLoading(true);
 		axios
 			.get(
@@ -61,15 +60,35 @@ const Home = () => {
 				setItems(res.data);
 				setIsLoading(false);
 			});
-		window.scrollTo(0, 0);
-	}, [categoryId, sort.sortProperty, searchValue]);
+	};
+	//вытащить теперь строку из url и перевести её в обьект
+	useEffect(() => {
+		if (window.location.search) {
+			//получить из обьект
+			const params = qs.parse(window.location.search.substring(1));
+			dispatch(setFilters({ ...params, sort }));
+			isSearch.current = true;
+		}
+	}, []);
 
 	useEffect(() => {
-		const queryString = qs.stringify({
-			sortProperty: sort.sortProperty,
-			categoryId,
-		});
-		navigate(`?${queryString}`);
+		window.scrollTo(0, 0);
+		if (!isSearch.current) {
+			fetchGames();
+		}
+		isSearch.current = false;
+	}, [categoryId, sort.sortProperty, searchValue]);
+
+	//url формирует
+	useEffect(() => {
+		if (isMounted.current) {
+			const queryString = qs.stringify({
+				sortProperty: sort.sortProperty,
+				categoryId,
+			});
+			navigate(`?${queryString}`);
+		}
+		isMounted.current = true;
 	}, [categoryId, sort.sortProperty]);
 
 	const skeletonLoader = [...new Array(8)].map((_, index) => (
