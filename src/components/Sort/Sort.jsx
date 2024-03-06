@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSort } from '../../redux/slices/filterSlice';
 
@@ -30,6 +30,8 @@ export const sortList = [
 ];
 
 export const Sort = () => {
+	//ссылка на dom элемент чтобы попап скрывать на клик в другом месте
+	const sortRef = useRef();
 	const dispatch = useDispatch();
 	const sort = useSelector((state) => state.filter.sort);
 
@@ -39,9 +41,21 @@ export const Sort = () => {
 		dispatch(setSort(i));
 		setOpen(!open);
 	};
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (!event.composedPath().includes(sortRef.current)) {
+				setOpen(false);
+			}
+		};
+		document.body.addEventListener('click', handleClickOutside);
+
+		return () => {
+			document.body.removeEventListener('click', handleClickOutside);
+		};
+	}, []);
 
 	return (
-		<div className="sort">
+		<div ref={sortRef} className="sort">
 			<div className="sort__label">
 				<svg
 					width="10"
