@@ -49,7 +49,11 @@ export const Header = () => {
 									strokeLinecap="round"
 									strokeLinejoin="round"></path>
 							</svg>
-							<span>{items.length}</span>
+							<span>
+								{items.reduce((sum, obj) => {
+									return obj.count + sum;
+								}, 0)}
+							</span>
 						</a>
 					</div>
 				</Link>

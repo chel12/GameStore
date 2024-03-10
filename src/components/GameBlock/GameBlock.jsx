@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../../redux/slices/cartSlice.js';
 
 export const GameBlock = ({
@@ -12,12 +12,11 @@ export const GameBlock = ({
 	category,
 	rating,
 }) => {
+	const dispatch = useDispatch();
 	const [activeType, setActiveType] = useState(0);
 	const [activeExtand, setActiveExtand] = useState(0);
-	const [count, setCount] = useState(0);
 
 	const onClickAddCount = () => {
-		setCount(count + 1);
 		const item = {
 			id,
 			title,
@@ -29,9 +28,10 @@ export const GameBlock = ({
 		dispatch(addItem(item));
 	};
 
-	const dispatch = useDispatch();
-
-	const onClickAdd = () => {};
+	const cartItem = useSelector((state) =>
+		state.cart.items.find((obj) => obj.id === id)
+	);
+	const addedCount = cartItem ? cartItem.count : 0;
 
 	return (
 		<div className="game-block-wrapper">
@@ -86,7 +86,7 @@ export const GameBlock = ({
 								fill="white"></path>
 						</svg>
 						<span>Добавить</span>
-						<i>{count}</i>
+						{addedCount > 0 && <i>{addedCount}</i>}
 					</button>
 				</div>
 			</div>
