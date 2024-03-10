@@ -1,0 +1,36 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pagination li {
+  display: inline-block;
+}
+.pagination li a {
+  cursor: pointer;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgb(58, 48, 178);
+  border-radius: 30px;
+  margin-right: 10px;
+  opacity: 0.6;
+  transition: all 0.2s ease-in-out;
+}
+.pagination li a:hover {
+  background: rgba(58, 48, 178, 0.6);
+  border: none;
+  opacity: 1;
+}
+.pagination li a:hover a {
+  color: aliceblue;
+}
+.pagination :global .selected a {
+  opacity: 1;
+  background: rgba(58, 48, 178, 0.6);
+  border: none;
+  color: #fff;
+}

@@ -41,6 +41,7 @@ export const Sort = () => {
 		dispatch(setSort(i));
 		setOpen(!open);
 	};
+	
 	useEffect(() => {
 		const handleClickOutside = (event) => {
 			if (!event.composedPath().includes(sortRef.current)) {

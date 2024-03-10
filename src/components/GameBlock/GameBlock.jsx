@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice.js';
 
 export const GameBlock = ({
 	title,
@@ -16,7 +18,20 @@ export const GameBlock = ({
 
 	const onClickAddCount = () => {
 		setCount(count + 1);
+		const item = {
+			id,
+			title,
+			price,
+			imgUrl,
+			type: types[activeType],
+			edition: editions[activeExtand],
+		};
+		dispatch(addItem(item));
 	};
+
+	const dispatch = useDispatch();
+
+	const onClickAdd = () => {};
 
 	return (
 		<div className="game-block-wrapper">
