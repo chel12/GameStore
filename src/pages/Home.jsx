@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
-import { Sort, sortList } from '../components/Sort/Sort';
+import { Sort } from '../components/Sort/Sort';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ import {
 	setFilters,
 } from '../redux/slices/filterSlice';
 import axios from 'axios';
+import { setItems } from '../redux/slices/gameSlice';
 
 const Home = () => {
 	const isSearch = useRef(false);
@@ -29,10 +30,10 @@ const Home = () => {
 	const { categoryId, sort, currentPage } = useSelector(
 		(state) => state.filter
 	);
+	const items = useSelector((state) => state.game.items);
 	//диспатч
 	const dispatch = useDispatch();
 	//стейты
-	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	//категории
 	// const [valueCategories, setValueCategories] = useState(0);
@@ -57,13 +58,13 @@ const Home = () => {
 		setIsLoading(true);
 
 		try {
-			const res = await axios.get(
+			const { data } = await axios.get(
 				`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
 			);
-			setItems(res.data);
-			setIsLoading(false);
+			dispatch(setItems(data));
 		} catch (error) {
 			alert('Ошибка при получение данных', error.message);
+		} finally {
 			setIsLoading(false);
 		}
 
