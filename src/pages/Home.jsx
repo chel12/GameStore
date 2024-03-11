@@ -48,18 +48,27 @@ const Home = () => {
 	};
 	// для запросов
 	//отдельная функция для избежания дабл рендеринга
-	const fetchGames = () => {
+	const fetchGames = async () => {
+		//убрать - из урла, чтобы красиво было
+		const sortBy = sort.sortProperty.replace('-', '');
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
+
 		setIsLoading(true);
-		axios
-			.get(
-				`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sort.sortProperty}${search}`
-			)
-			.then((res) => {
-				setItems(res.data);
-				setIsLoading(false);
-			});
+
+		// await axios
+		// 	.get(
+		// 		`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
+		// 	)
+		// 	.then((res) => {
+		// 		setItems(res.data);
+		// 		setIsLoading(false);
+		// 	});
+		const res = await axios.get(
+			`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
+		);
+		setItems(res.data);
+		setIsLoading(false);
 	};
 	//вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
