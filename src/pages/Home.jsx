@@ -56,19 +56,18 @@ const Home = () => {
 
 		setIsLoading(true);
 
-		// await axios
-		// 	.get(
-		// 		`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
-		// 	)
-		// 	.then((res) => {
-		// 		setItems(res.data);
-		// 		setIsLoading(false);
-		// 	});
-		const res = await axios.get(
-			`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
-		);
-		setItems(res.data);
-		setIsLoading(false);
+		try {
+			const res = await axios.get(
+				`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
+			);
+			setItems(res.data);
+			setIsLoading(false);
+		} catch (error) {
+			alert('Ошибка при получение данных', error.message);
+			setIsLoading(false);
+		}
+
+		window.scroll(0, 0);
 	};
 	//вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
