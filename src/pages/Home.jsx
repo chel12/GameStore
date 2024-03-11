@@ -17,8 +17,8 @@ import {
 	setPageCount,
 	setFilters,
 } from '../redux/slices/filterSlice';
-import axios from 'axios';
-import { setItems } from '../redux/slices/gameSlice';
+
+import { fetchGames } from '../redux/slices/gameSlice';
 
 const Home = () => {
 	const isSearch = useRef(false);
@@ -30,11 +30,11 @@ const Home = () => {
 	const { categoryId, sort, currentPage } = useSelector(
 		(state) => state.filter
 	);
-	const items = useSelector((state) => state.game.items);
+	const { items, status } = useSelector((state) => state.game);
 	//диспатч
 	const dispatch = useDispatch();
 	//стейты
-	const [isLoading, setIsLoading] = useState(true);
+
 	//категории
 	// const [valueCategories, setValueCategories] = useState(0);
 	//сортировка
@@ -48,28 +48,17 @@ const Home = () => {
 		dispatch(setPageCount(number));
 	};
 	// для запросов
+
 	//отдельная функция для избежания дабл рендеринга
-	const fetchGames = async () => {
+	const getGames = async () => {
 		//убрать - из урла, чтобы красиво было
 		const sortBy = sort.sortProperty.replace('-', '');
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
-
-		setIsLoading(true);
-
-		try {
-			const { data } = await axios.get(
-				`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
-			);
-			dispatch(setItems(data));
-		} catch (error) {
-			alert('Ошибка при получение данных', error.message);
-		} finally {
-			setIsLoading(false);
-		}
-
+		dispatch(fetchGames({ sortBy, category, search }));
 		window.scroll(0, 0);
 	};
+
 	//вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
 		if (window.location.search) {
@@ -83,7 +72,7 @@ const Home = () => {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 		if (!isSearch.current) {
-			fetchGames();
+			getGames();
 		}
 		isSearch.current = false;
 	}, [categoryId, sort.sortProperty, searchValue]);
@@ -129,7 +118,7 @@ const Home = () => {
 				</div>
 				<h2 className="content__title">Все игры</h2>
 				<div className="content__items">
-					{isLoading ? skeletonLoader : games}
+					{status === 'loading' ? skeletonLoader : games}
 				</div>
 				<Pagination
 					currentPage={currentPage}
