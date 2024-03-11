@@ -117,9 +117,17 @@ const Home = () => {
 					<Sort />
 				</div>
 				<h2 className="content__title">Все игры</h2>
-				<div className="content__items">
-					{status === 'loading' ? skeletonLoader : games}
-				</div>
+				{status === 'error' ? (
+					<div className="content__error-info">
+						<h2>Что-то пошло не так :/ </h2>
+						<p>Не удалось загрузить Каталог</p>
+					</div>
+				) : (
+					<div className="content__items">
+						{status === 'loading' ? skeletonLoader : games}
+					</div>
+				)}
+
 				<Pagination
 					currentPage={currentPage}
 					onChangePage={onChangePage}
