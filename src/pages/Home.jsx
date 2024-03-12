@@ -21,22 +21,25 @@ import {
 import { fetchGames } from '../redux/slices/gameSlice';
 
 const Home = () => {
+
 	const isSearch = useRef(false);
 	//для проверки, если запрос из url чтобы не получать
+
 	const isMounted = useRef(false);
 	//для проверки, чтобы не вшивал qs все данные сразу в url при 1 рендере
+
 	const navigate = useNavigate();
 	//селекторы для редакса
+
 	const { categoryId, sort, currentPage } = useSelector(
 		(state) => state.filter
 	);
+
 	const { items, status } = useSelector((state) => state.game);
+	
 	//диспатч
 	const dispatch = useDispatch();
-	//стейты
-
-	//категории
-	// const [valueCategories, setValueCategories] = useState(0);
+	
 	//сортировка
 	const { searchValue } = useContext(AppContext);
 
@@ -51,11 +54,12 @@ const Home = () => {
 
 	//отдельная функция для избежания дабл рендеринга
 	const getGames = async () => {
-		//убрать - из урла, чтобы красиво было
-		const sortBy = sort.sortProperty.replace('-', '');
+		
+		const sortBy = sort.sortProperty;
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
 		dispatch(fetchGames({ sortBy, category, search }));
+		
 		window.scroll(0, 0);
 	};
 

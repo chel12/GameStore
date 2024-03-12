@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSort } from '../../redux/slices/filterSlice';
+import { selectSort, setSort } from '../../redux/slices/filterSlice';
 
 export const sortList = [
 	{
@@ -33,7 +33,7 @@ export const Sort = () => {
 	//ссылка на dom элемент чтобы попап скрывать на клик в другом месте
 	const sortRef = useRef();
 	const dispatch = useDispatch();
-	const sort = useSelector((state) => state.filter.sort);
+	const sort = useSelector(selectSort);
 
 	const [open, setOpen] = useState(false);
 
@@ -41,7 +41,7 @@ export const Sort = () => {
 		dispatch(setSort(i));
 		setOpen(!open);
 	};
-	
+
 	useEffect(() => {
 		const handleClickOutside = (event) => {
 			if (!event.composedPath().includes(sortRef.current)) {
