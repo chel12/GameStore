@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Search } from '../Search/Search';
-import { useSelector, UseSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/slices/cartSlice';
 
 export const Header = () => {

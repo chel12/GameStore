@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCartItem } from '../../redux/slices/cartSlice.js';
+import { addItem, selectCartItemId } from '../../redux/slices/cartSlice.js';
 
 export const GameBlock = ({
 	title,
@@ -28,7 +28,7 @@ export const GameBlock = ({
 		dispatch(addItem(item));
 	};
 
-	const cartItem = useSelector(selectCartItem(id));
+	const cartItem = useSelector(selectCartItemId(id));
 	const addedCount = cartItem ? cartItem.count : 0;
 
 	return (

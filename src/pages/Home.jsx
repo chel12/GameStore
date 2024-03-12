@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
 import { Sort } from '../components/Sort/Sort';
@@ -16,12 +16,12 @@ import {
 	setCategoryId,
 	setPageCount,
 	setFilters,
+	selectFilter,
 } from '../redux/slices/filterSlice';
 
-import { fetchGames } from '../redux/slices/gameSlice';
+import { fetchGames, selectGameData } from '../redux/slices/gameSlice';
 
 const Home = () => {
-
 	const isSearch = useRef(false);
 	//для проверки, если запрос из url чтобы не получать
 
@@ -29,19 +29,17 @@ const Home = () => {
 	//для проверки, чтобы не вшивал qs все данные сразу в url при 1 рендере
 
 	const navigate = useNavigate();
+
 	//селекторы для редакса
+	const { categoryId, sort, currentPage, searchValue } =
+		useSelector(selectFilter);
+	const { items, status } = useSelector(selectGameData);
 
-	const { categoryId, sort, currentPage } = useSelector(
-		(state) => state.filter
-	);
-
-	const { items, status } = useSelector((state) => state.game);
-	
 	//диспатч
 	const dispatch = useDispatch();
-	
+
 	//сортировка
-	const { searchValue } = useContext(AppContext);
+
 
 	const onChangeCategory = (id) => {
 		dispatch(setCategoryId(id));
@@ -54,12 +52,11 @@ const Home = () => {
 
 	//отдельная функция для избежания дабл рендеринга
 	const getGames = async () => {
-		
 		const sortBy = sort.sortProperty;
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
 		dispatch(fetchGames({ sortBy, category, search }));
-		
+
 		window.scroll(0, 0);
 	};
 

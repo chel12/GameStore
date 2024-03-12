@@ -26,7 +26,8 @@ export const gameSlice = createSlice({
 			state.items = action.payload;
 		},
 	},
-	extraReducers: (builder) => { //обработка Санки и состояний её, где задаём статус загрузки
+	extraReducers: (builder) => {
+		//обработка Санки и состояний её, где задаём статус загрузки
 		builder
 			.addCase(fetchGames.pending, (state) => {
 				state.status = 'loading';
@@ -42,6 +43,8 @@ export const gameSlice = createSlice({
 			});
 	},
 });
+//селекторы
+export const selectGameData = (state) => state.game;
 
 // Action creators are generated for each case reducer function
 export const { setItems } = gameSlice.actions;
