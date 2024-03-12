@@ -5,7 +5,7 @@ import NotFound from './pages/NotFound';
 
 import './scss/app.scss';
 import { Cart } from './pages/Cart';
-
+import FullGame from './pages/FullGame';
 
 function App() {
 	//https://e7feb94fe973f168.mokky.dev/items
@@ -17,6 +17,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/cart" element={<Cart />} />
+					<Route path="/game/:id" element={<FullGame />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</div>
