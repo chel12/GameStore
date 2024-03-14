@@ -1,24 +1,35 @@
+import axios from 'axios';
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 const FullGame = () => {
+	//достаем id, вернет значение ещё
 	const { id } = useParams();
+	const [game, setGame] = useState();
 
+	useEffect(() => {
+		async function fetchGame() {
+			try {
+				const { data } = await axios.get(
+					'https://e7feb94fe973f168.mokky.dev/items/' + id
+				);
+				setGame(data);
+			} catch (error) {
+				alert('Ошибка при получение игры  ');
+			}
+		}
+		fetchGame();
+	}, []);
+	if (!game) {
+		return <h1>Загрузка</h1>;
+	}
 	return (
 		<div className="container">
-			<img src="" alt="" />
-			<h1>Title {id}</h1>
-			<h2> 250 rubchinskih</h2>
-			<p>
-				Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-				Blanditiis aperiam deserunt, error, recusandae voluptatem
-				aspernatur ratione dolorum eveniet aliquid illo aut
-				necessitatibus veniam autem asperiores culpa labore soluta
-				quibusdam modi.
-			</p>
-			<div>
-				<button>Allo</button>
-			</div>
+			<img src={game.imgUrl} alt="" />
+			<h2>{game.title}</h2>
+			<h4>{game.price}</h4>
 		</div>
 	);
 };
