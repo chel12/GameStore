@@ -2,11 +2,12 @@ import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 
 const FullGame = () => {
 	//достаем id, вернет значение ещё
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const [game, setGame] = useState();
 
 	useEffect(() => {
@@ -18,6 +19,7 @@ const FullGame = () => {
 				setGame(data);
 			} catch (error) {
 				alert('Ошибка при получение игры  ');
+				navigate('/');
 			}
 		}
 		fetchGame();

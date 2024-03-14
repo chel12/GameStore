@@ -3,25 +3,29 @@ import { Header } from './components/Header/Header';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 
+
 import './scss/app.scss';
 import { Cart } from './pages/Cart';
 import FullGame from './pages/FullGame';
+import MainLayout from './layouts/MainLayout';
+
+
 
 function App() {
 	//https://e7feb94fe973f168.mokky.dev/items
 
 	return (
-		<div className="wrapper">
-			<Header />
-			<div className="content">
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/cart" element={<Cart />} />
-					<Route path="/game/:id" element={<FullGame />} />
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-			</div>
-		</div>
+		<Routes>
+			<Route path="/" element={<MainLayout />}>
+				<Route path="/" element={<Home />} />
+				<Route path="/cart" element={<Cart />} />
+				<Route path="/game/:id" element={<FullGame />} />
+				<Route path="*" element={<NotFound />} />
+			</Route>
+		</Routes>
+		// <Routes>
+		//
+		// </Routes>
 	);
 }
 
