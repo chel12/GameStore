@@ -1,15 +1,13 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
 import { Sort } from '../components/Sort/Sort';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, Link } from 'react-router-dom';
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
 
 import Pagination from '../components/Pagination/Pagination';
-import { AppContext } from '../App';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -39,7 +37,6 @@ const Home = () => {
 	const dispatch = useDispatch();
 
 	//сортировка
-
 
 	const onChangeCategory = (id) => {
 		dispatch(setCategoryId(id));
@@ -94,17 +91,18 @@ const Home = () => {
 		<GameBlockSkeleton key={index} />
 	));
 	const games = items.map((item) => (
-		<GameBlock
-			key={item.title}
-			title={item.title}
-			price={item.price}
-			id={item.id}
-			imgUrl={item.imgUrl}
-			types={item.types}
-			editions={item.editions}
-			category={item.category}
-			rating={item.rating}
-		/>
+		<Link to={`/game/${item.id}`} key={item.title}>
+			<GameBlock
+				title={item.title}
+				price={item.price}
+				id={item.id}
+				imgUrl={item.imgUrl}
+				types={item.types}
+				editions={item.editions}
+				category={item.category}
+				rating={item.rating}
+			/>
+		</Link>
 	));
 
 	return (

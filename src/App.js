@@ -17,7 +17,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/cart" element={<Cart />} />
-					<Route path="/items/:id" element={<FullGame />} />
+					<Route path="/game/:id" element={<FullGame />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</div>
