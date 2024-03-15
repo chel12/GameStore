@@ -3,13 +3,11 @@ import { Header } from './components/Header/Header';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 
-
 import './scss/app.scss';
 import { Cart } from './pages/Cart';
 import FullGame from './pages/FullGame';
 import MainLayout from './layouts/MainLayout';
-
-
+import React from 'react';
 
 function App() {
 	//https://e7feb94fe973f168.mokky.dev/items
@@ -23,9 +21,6 @@ function App() {
 				<Route path="*" element={<NotFound />} />
 			</Route>
 		</Routes>
-		// <Routes>
-		//
-		// </Routes>
 	);
 }
 
