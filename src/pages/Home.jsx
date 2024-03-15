@@ -91,8 +91,9 @@ const Home = () => {
 		<GameBlockSkeleton key={index} />
 	));
 	const games = items.map((item) => (
-		<Link to={`/game/${item.id}`} key={item.title}>
+		
 			<GameBlock
+				key={item.title}
 				title={item.title}
 				price={item.price}
 				id={item.id}
@@ -102,7 +103,7 @@ const Home = () => {
 				category={item.category}
 				rating={item.rating}
 			/>
-		</Link>
+		
 	));
 
 	return (

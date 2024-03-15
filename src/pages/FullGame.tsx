@@ -4,11 +4,15 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
-const FullGame = () => {
+const FullGame: React.FC = () => {
 	//достаем id, вернет значение ещё
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [game, setGame] = useState();
+	const [game, setGame] = useState<{
+		imgUrl: string;
+		title: string;
+		price: number;
+	}>();
 
 	useEffect(() => {
 		async function fetchGame() {
@@ -24,9 +28,15 @@ const FullGame = () => {
 		}
 		fetchGame();
 	}, []);
+
 	if (!game) {
-		return <h1>Загрузка</h1>;
+		return (
+			<>
+				<h1>Загрузка</h1>
+			</>
+		);
 	}
+
 	return (
 		<div className="container">
 			<img src={game.imgUrl} alt="" />

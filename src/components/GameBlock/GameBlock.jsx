@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, selectCartItemId } from '../../redux/slices/cartSlice.js';
+import { Link } from 'react-router-dom';
 
 export const GameBlock = ({
 	title,
@@ -34,7 +35,13 @@ export const GameBlock = ({
 	return (
 		<div className="game-block-wrapper">
 			<div className="game-block">
-				<img className="game-block__image" src={imgUrl} alt="Game" />
+				<Link to={`/game/${id}`}>
+					<img
+						className="game-block__image"
+						src={imgUrl}
+						alt="Game"
+					/>
+				</Link>
 				<h4 className="game-block__title">{title}</h4>
 				<div className="game-block__selector">
 					<ul>
