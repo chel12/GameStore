@@ -2,9 +2,16 @@ import React from 'react';
 
 type CategoriesProps = {
 	categoryId: number;
-	onChangeCategory: any;
+	onChangeCategory: (index: number) => void;
 };
-
+const categories = [
+	'Все',
+	'Action',
+	'Racing',
+	'Strategy',
+	'Sports',
+	'Flight simulation',
+];
 export const Categories: React.FC<CategoriesProps> = ({
 	categoryId,
 	onChangeCategory,
@@ -15,16 +22,7 @@ export const Categories: React.FC<CategoriesProps> = ({
 	//   ...
 	// };
 
-	//setActiveIndex(index) лайт варик дял простого
-
-	const categories = [
-		'Все',
-		'Action',
-		'Racing',
-		'Strategy',
-		'Sports',
-		'Flight simulation',
-	];
+	//setActiveIndex(index) лайт варик для простого
 
 	return (
 		<div className="categories">
@@ -37,12 +35,6 @@ export const Categories: React.FC<CategoriesProps> = ({
 						{li}
 					</li>
 				))}
-				{/* <li className="active">Все</li>
-				<li>Action</li>
-				<li>Racing</li>
-				<li>Strategy</li>
-				<li>Sports</li>
-				<li>Flight simulation</li> */}
 			</ul>
 		</div>
 	);

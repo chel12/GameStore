@@ -55,7 +55,8 @@ const Home: React.FC = () => {
 
 		dispatch(
 			// @ts-ignore
-			fetchGames({ sortBy, category, search }));
+			fetchGames({ sortBy, category, search })
+		);
 
 		window.scroll(0, 0);
 	};
@@ -113,7 +114,7 @@ const Home: React.FC = () => {
 				<div className="content__top">
 					<Categories
 						categoryId={categoryId}
-						onChangeCategory={(i: any) => onChangeCategory(i)}
+						onChangeCategory={ onChangeCategory}
 					/>
 					<Sort />
 				</div>

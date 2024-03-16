@@ -9,7 +9,7 @@ export const Search: React.FC = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState<string>('');
 
-	const onClickClear = () => {
+	const onClickClear = (event: React.MouseEvent<SVGSVGElement>) => {
 		dispatch(setSearchValue(''));
 		setValue(''); //локально очистить
 		inputRef.current?.focus();
@@ -25,7 +25,7 @@ export const Search: React.FC = () => {
 		[]
 	);
 
-	const onChangeInput = (e: any) => {
+	const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.value);
 		updateSearchValue(e.target.value);
 	};
