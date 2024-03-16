@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCartItemId } from '../../redux/slices/cartSlice.js';
+import {
+	CartItem,
+	addItem,
+	selectCartItemId,
+} from '../../redux/slices/cartSlice';
 import { Link } from 'react-router-dom';
 
-type GameBlockProps = {
+export type GameBlockProps = {
 	title: string;
 	price: number;
 	id: string;
@@ -27,13 +31,14 @@ export const GameBlock: React.FC<GameBlockProps> = ({
 	const [activeExtand, setActiveExtand] = useState<number>(0);
 
 	const onClickAddCount = () => {
-		const item = {
+		const item: CartItem = {
 			id,
 			title,
 			price,
 			imgUrl,
 			type: types[activeType],
 			edition: editions[activeExtand],
+			count: 0,
 		};
 		dispatch(addItem(item));
 	};

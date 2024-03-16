@@ -1,19 +1,36 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { RootState } from '../store';
 
 //перейти,достать,вернуть (Санка получения данных)
-export const fetchGames = createAsyncThunk(
+export const fetchGames = createAsyncThunk<Game[], Record<string, string>>(
 	'game/fetchGamesStatus',
 	async (params) => {
 		const { sortBy, category, search } = params;
-		const { data } = await axios.get(
+		const { data } = await axios.get<Game[]>(
 			`https://e7feb94fe973f168.mokky.dev/items?${category}&sortBy=${sortBy}${search}`
 		);
 		return data;
 	}
 );
 
-const initialState = {
+type Game = {
+	id: string;
+	imgUrl: string;
+	title: string;
+	types: string[];
+	editions: string[];
+	price: number;
+	category: string;
+	rating: number;
+};
+
+interface GameSliceState {
+	items: Game[];
+	status: 'loading' | 'success' | 'error';
+}
+
+const initialState: GameSliceState = {
 	items: [],
 	status: 'loading', //loading | success | error (для контроля скелетона)
 };
@@ -22,7 +39,7 @@ export const gameSlice = createSlice({
 	name: 'game',
 	initialState,
 	reducers: {
-		setItems(state, action) {
+		setItems(state, action: PayloadAction<Game[]>) {
 			state.items = action.payload;
 		},
 	},
@@ -44,7 +61,7 @@ export const gameSlice = createSlice({
 	},
 });
 //селекторы
-export const selectGameData = (state) => state.game;
+export const selectGameData = (state: RootState) => state.game;
 
 // Action creators are generated for each case reducer function
 export const { setItems } = gameSlice.actions;
