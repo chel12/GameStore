@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSort, setSort } from '../../redux/slices/filterSlice';
 
-export const sortList = [
+type SortItem = {
+	name: string;
+	sortProperty: string;
+};
+
+export const sortList: SortItem[] = [
 	{
 		name: `популярности ˄`,
 		sortProperty: 'rating',
@@ -29,15 +34,15 @@ export const sortList = [
 	},
 ];
 
-export const Sort = () => {
+export const Sort: React.FC = () => {
 	//ссылка на dom элемент чтобы попап скрывать на клик в другом месте
-	const sortRef = useRef();
+	const sortRef = useRef<HTMLDivElement>(null);
 	const dispatch = useDispatch();
 	const sort = useSelector(selectSort);
 
 	const [open, setOpen] = useState(false);
 
-	const onClickListItem = (i) => {
+	const onClickListItem = (i: SortItem) => {
 		dispatch(setSort(i));
 		setOpen(!open);
 	};
