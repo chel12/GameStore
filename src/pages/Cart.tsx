@@ -5,11 +5,11 @@ import CartEmpty from '../components/CartEmpty/CartEmpty';
 import CartItem from '../components/CartItem/CartItem';
 import { clearItems } from '../redux/slices/cartSlice';
 
-export const Cart = () => {
+export const Cart: React.FC = () => {
 	const dispatch = useDispatch();
-	const { totalPrice, items } = useSelector((state) => state.cart);
+	const { totalPrice, items } = useSelector((state: any) => state.cart);
 
-	const totalCount = items.reduce((sum, obj) => {
+	const totalCount = items.reduce((sum: number, obj: any) => {
 		return obj.count + sum;
 	}, 0);
 
@@ -24,9 +24,9 @@ export const Cart = () => {
 	}
 	return (
 		<div className="container container--cart">
-			<div class="cart">
-				<div class="cart__top">
-					<h2 class="content__title">
+			<div className="cart">
+				<div className="cart__top">
+					<h2 className="content__title">
 						<svg
 							width="18"
 							height="18"
@@ -54,7 +54,7 @@ export const Cart = () => {
 						</svg>
 						Корзина
 					</h2>
-					<div class="cart__clear">
+					<div className="cart__clear">
 						<svg
 							width="20"
 							height="20"
@@ -90,13 +90,13 @@ export const Cart = () => {
 						<span onClick={onClickClear}>Очистить корзину</span>
 					</div>
 				</div>
-				<div class="content__items">
-					{items.map((item) => (
+				<div className="content__items">
+					{items.map((item: any) => (
 						<CartItem {...item} key={item.id} />
 					))}
 				</div>
-				<div class="cart__bottom">
-					<div class="cart__bottom-details">
+				<div className="cart__bottom">
+					<div className="cart__bottom-details">
 						<span>
 							Всего игр:
 							<b>{totalCount} шт.</b>
@@ -105,10 +105,10 @@ export const Cart = () => {
 							Сумма заказа: <b>{totalPrice} ₽</b>
 						</span>
 					</div>
-					<div class="cart__bottom-buttons">
+					<div className="cart__bottom-buttons">
 						<Link
 							to="/"
-							class="button button--outline button--add
+							className="button button--outline button--add
 							go-back-btn">
 							<svg
 								width="8"
@@ -125,7 +125,7 @@ export const Cart = () => {
 							</svg>
 							<span>Вернуться назад</span>
 						</Link>
-						<div class="button pay-btn">
+						<div className="button pay-btn">
 							<span>Оплатить сейчас</span>
 						</div>
 					</div>

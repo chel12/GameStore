@@ -5,17 +5,17 @@ import debounce from 'lodash.debounce';
 import styles from './Search.module.scss';
 import { useDispatch } from 'react-redux';
 
-export const Search = () => {
+export const Search: React.FC = () => {
 	const dispatch = useDispatch();
-	const [value, setValue] = useState('');
+	const [value, setValue] = useState<string>('');
 
 	const onClickClear = () => {
 		dispatch(setSearchValue(''));
 		setValue(''); //локально очистить
-		inputRef.current.focus();
+		inputRef.current?.focus();
 	};
 
-	const inputRef = useRef();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const updateSearchValue = useCallback(
 		//отложенная функция
@@ -25,7 +25,7 @@ export const Search = () => {
 		[]
 	);
 
-	const onChangeInput = (e) => {
+	const onChangeInput = (e: any) => {
 		setValue(e.target.value);
 		updateSearchValue(e.target.value);
 	};
@@ -35,7 +35,6 @@ export const Search = () => {
 			<svg
 				className={styles.icon}
 				xmlns="http://www.w3.org/2000/svg"
-				ariaLabelledby="searchIconTitle"
 				color="#2329D6"
 				fill="none"
 				height="48px"

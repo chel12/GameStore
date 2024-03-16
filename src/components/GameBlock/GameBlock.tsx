@@ -3,19 +3,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem, selectCartItemId } from '../../redux/slices/cartSlice.js';
 import { Link } from 'react-router-dom';
 
-export const GameBlock = ({
+type GameBlockProps = {
+	title: string;
+	price: number;
+	id: string;
+	imgUrl: string;
+	types: string[];
+	editions: string[];
+	category: string;
+	rating: number;
+};
+
+export const GameBlock: React.FC<GameBlockProps> = ({
 	title,
 	price,
 	id,
 	imgUrl,
 	types,
 	editions,
-	category,
-	rating,
 }) => {
 	const dispatch = useDispatch();
-	const [activeType, setActiveType] = useState(0);
-	const [activeExtand, setActiveExtand] = useState(0);
+	const [activeType, setActiveType] = useState<number>(0);
+	const [activeExtand, setActiveExtand] = useState<number>(0);
 
 	const onClickAddCount = () => {
 		const item = {

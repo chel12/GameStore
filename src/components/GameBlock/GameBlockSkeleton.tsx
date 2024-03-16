@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-const GameBlockSkeleton = (props) => (
+const GameBlockSkeleton: React.FC = (props) => (
 	<ContentLoader
 		className="game-block"
 		speed={2}

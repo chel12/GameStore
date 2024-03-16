@@ -1,5 +1,14 @@
+import React from 'react';
 
-export const Categories = ({ categoryId, onChangeCategory }) => {
+type CategoriesProps = {
+	categoryId: number;
+	onChangeCategory: any;
+};
+
+export const Categories: React.FC<CategoriesProps> = ({
+	categoryId,
+	onChangeCategory,
+}) => {
 	// const onClickCategory = (index) => {  вариант для сложных
 	// 	setActiveIndex(index);
 	//   ...

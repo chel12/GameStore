@@ -48,7 +48,7 @@ export const Sort: React.FC = () => {
 	};
 
 	useEffect(() => {
-		const handleClickOutside = (event) => {
+		const handleClickOutside = (event: any) => {
 			if (!event.composedPath().includes(sortRef.current)) {
 				setOpen(false);
 			}

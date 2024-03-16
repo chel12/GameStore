@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { Categories } from '../components/Categories/Categories';
 import { Sort } from '../components/Sort/Sort';
 import qs from 'qs';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
 
@@ -19,7 +19,7 @@ import {
 
 import { fetchGames, selectGameData } from '../redux/slices/gameSlice';
 
-const Home = () => {
+const Home: React.FC = () => {
 	const isSearch = useRef(false);
 	//для проверки, если запрос из url чтобы не получать
 
@@ -38,11 +38,11 @@ const Home = () => {
 
 	//сортировка
 
-	const onChangeCategory = (id) => {
+	const onChangeCategory = (id: number) => {
 		dispatch(setCategoryId(id));
 	};
 
-	const onChangePage = (number) => {
+	const onChangePage = (number: number) => {
 		dispatch(setPageCount(number));
 	};
 	// для запросов
@@ -52,7 +52,10 @@ const Home = () => {
 		const sortBy = sort.sortProperty;
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
-		dispatch(fetchGames({ sortBy, category, search }));
+
+		dispatch(
+			// @ts-ignore
+			fetchGames({ sortBy, category, search }));
 
 		window.scroll(0, 0);
 	};
@@ -90,20 +93,18 @@ const Home = () => {
 	const skeletonLoader = [...new Array(8)].map((_, index) => (
 		<GameBlockSkeleton key={index} />
 	));
-	const games = items.map((item) => (
-		
-			<GameBlock
-				key={item.title}
-				title={item.title}
-				price={item.price}
-				id={item.id}
-				imgUrl={item.imgUrl}
-				types={item.types}
-				editions={item.editions}
-				category={item.category}
-				rating={item.rating}
-			/>
-		
+	const games = items.map((item: any) => (
+		<GameBlock
+			key={item.title}
+			title={item.title}
+			price={item.price}
+			id={item.id}
+			imgUrl={item.imgUrl}
+			types={item.types}
+			editions={item.editions}
+			category={item.category}
+			rating={item.rating}
+		/>
 	));
 
 	return (
@@ -112,7 +113,7 @@ const Home = () => {
 				<div className="content__top">
 					<Categories
 						categoryId={categoryId}
-						onChangeCategory={(i) => onChangeCategory(i)}
+						onChangeCategory={(i: any) => onChangeCategory(i)}
 					/>
 					<Sort />
 				</div>
