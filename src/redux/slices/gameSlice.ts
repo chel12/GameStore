@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../store';
+import { Sort } from './filterSlice';
 
 //перейти,достать,вернуть (Санка получения данных)
-export const fetchGames = createAsyncThunk<Game[], Record<string, string>>(
+export const fetchGames = createAsyncThunk<Game[], SearchGameParams>(
 	'game/fetchGamesStatus',
 	async (params) => {
 		const { sortBy, category, search } = params;
@@ -13,6 +14,11 @@ export const fetchGames = createAsyncThunk<Game[], Record<string, string>>(
 		return data;
 	}
 );
+export type SearchGameParams = {
+	sortBy: string;
+	category: string;
+	search: string;
+};
 
 type Game = {
 	id: string;
@@ -24,15 +30,20 @@ type Game = {
 	category: string;
 	rating: number;
 };
+export enum Status {
+	LOADING = 'loading',
+	SUCCESS = 'success',
+	ERROR = 'error',
+}
 
 interface GameSliceState {
 	items: Game[];
-	status: 'loading' | 'success' | 'error';
+	status: Status;
 }
 
 const initialState: GameSliceState = {
 	items: [],
-	status: 'loading', //loading | success | error (для контроля скелетона)
+	status: Status.LOADING, //loading | success | error (для контроля скелетона)
 };
 
 export const gameSlice = createSlice({
@@ -47,15 +58,15 @@ export const gameSlice = createSlice({
 		//обработка Санки и состояний её, где задаём статус загрузки
 		builder
 			.addCase(fetchGames.pending, (state) => {
-				state.status = 'loading';
+				state.status = Status.LOADING;
 				state.items = [];
 			})
 			.addCase(fetchGames.fulfilled, (state, action) => {
 				state.items = action.payload;
-				state.status = 'success';
+				state.status = Status.SUCCESS;
 			})
 			.addCase(fetchGames.rejected, (state) => {
-				state.status = 'error';
+				state.status = Status.ERROR;
 				state.items = [];
 			});
 	},

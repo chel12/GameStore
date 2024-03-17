@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
-import { Sort } from '../components/Sort/Sort';
+import { SortP, sortList } from '../components/Sort/Sort';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 import { GameBlock } from '../components/GameBlock/GameBlock';
@@ -9,7 +9,7 @@ import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
 
 import Pagination from '../components/Pagination/Pagination';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
 	setCategoryId,
 	setPageCount,
@@ -17,7 +17,12 @@ import {
 	selectFilter,
 } from '../redux/slices/filterSlice';
 
-import { fetchGames, selectGameData } from '../redux/slices/gameSlice';
+import {
+	SearchGameParams,
+	fetchGames,
+	selectGameData,
+} from '../redux/slices/gameSlice';
+import { useAppDispatch } from '../redux/store';
 
 const Home: React.FC = () => {
 	const isSearch = useRef(false);
@@ -34,7 +39,7 @@ const Home: React.FC = () => {
 	const { items, status } = useSelector(selectGameData);
 
 	//диспатч
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	//сортировка
 
@@ -53,10 +58,7 @@ const Home: React.FC = () => {
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
 
-		dispatch(
-			// @ts-ignore
-			fetchGames({ sortBy, category, search })
-		);
+		dispatch(fetchGames({ sortBy, category, search }));
 
 		window.scroll(0, 0);
 	};
@@ -64,9 +66,22 @@ const Home: React.FC = () => {
 	//вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
 		if (window.location.search) {
-			//получить из обьект
-			const params = qs.parse(window.location.search.substring(1));
-			dispatch(setFilters({ ...params, sort }));
+			//получить из URL обьект
+			const params = qs.parse(
+				window.location.search.substring(1)
+			) as unknown as SearchGameParams;
+			const sort = sortList.find(
+				(obj) => obj.sortProperty === params.sortBy
+			);
+			//после получения URL,отправляем в Redux запрос и устанавливаем фильтр
+			dispatch(
+				setFilters({
+					searchValue: params.search,
+					categoryId: Number(params.category),
+					sort: sort || sortList[0],
+					currentPage,
+				})
+			);
 			isSearch.current = true;
 		}
 	}, []);
@@ -114,9 +129,9 @@ const Home: React.FC = () => {
 				<div className="content__top">
 					<Categories
 						categoryId={categoryId}
-						onChangeCategory={ onChangeCategory}
+						onChangeCategory={onChangeCategory}
 					/>
-					<Sort />
+					<SortP />
 				</div>
 				<h2 className="content__title">Все игры</h2>
 				{status === 'error' ? (

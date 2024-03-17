@@ -1,40 +1,44 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSort, setSort } from '../../redux/slices/filterSlice';
+import {
+	SortPropertyEnum,
+	selectSort,
+	setSort,
+} from '../../redux/slices/filterSlice';
 
 type SortItem = {
 	name: string;
-	sortProperty: string;
+	sortProperty: SortPropertyEnum;
 };
 
 export const sortList: SortItem[] = [
 	{
 		name: `популярности ˄`,
-		sortProperty: 'rating',
+		sortProperty: SortPropertyEnum.RATING_DESC,
 	},
 	{
 		name: `популярности ˅`,
-		sortProperty: '-rating',
+		sortProperty: SortPropertyEnum.RATING_ASC,
 	},
 	{
 		name: 'алфавиту ˄',
-		sortProperty: 'title',
+		sortProperty: SortPropertyEnum.TITLE_DESC,
 	},
 	{
 		name: 'алфавиту ˅',
-		sortProperty: '-title',
+		sortProperty: SortPropertyEnum.TITLE_ASC,
 	},
 	{
 		name: 'цене ˄',
-		sortProperty: 'price',
+		sortProperty: SortPropertyEnum.PRICE_DESC,
 	},
 	{
 		name: 'цене ˅',
-		sortProperty: '-price',
+		sortProperty: SortPropertyEnum.PRICE_ASC,
 	},
 ];
 
-export const Sort: React.FC = () => {
+export const SortP: React.FC = () => {
 	//ссылка на dom элемент чтобы попап скрывать на клик в другом месте
 	const sortRef = useRef<HTMLDivElement>(null);
 	const dispatch = useDispatch();
