@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { Categories } from '../components/Categories/Categories';
 import { SortP, sortList } from '../components/Sort/Sort';
@@ -43,9 +43,9 @@ const Home: React.FC = () => {
 
 	//сортировка
 
-	const onChangeCategory = (id: number) => {
+	const onChangeCategory = useCallback((id: number) => {
 		dispatch(setCategoryId(id));
-	};
+	}, []);
 
 	const onChangePage = (number: number) => {
 		dispatch(setPageCount(number));
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
 						categoryId={categoryId}
 						onChangeCategory={onChangeCategory}
 					/>
-					<SortP />
+					<SortP value={sort} />
 				</div>
 				<h2 className="content__title">Все игры</h2>
 				{status === 'error' ? (

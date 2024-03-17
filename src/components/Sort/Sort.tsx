@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
+	Sort,
 	SortPropertyEnum,
-	selectSort,
 	setSort,
 } from '../../redux/slices/filterSlice';
-
+type SortPProps = { value: Sort };
 type SortItem = {
 	name: string;
 	sortProperty: SortPropertyEnum;
@@ -38,12 +38,10 @@ export const sortList: SortItem[] = [
 	},
 ];
 
-export const SortP: React.FC = () => {
+export const SortP: React.FC<SortPProps> = React.memo(({ value }) => {
 	//ссылка на dom элемент чтобы попап скрывать на клик в другом месте
 	const sortRef = useRef<HTMLDivElement>(null);
 	const dispatch = useDispatch();
-	const sort = useSelector(selectSort);
-
 	const [open, setOpen] = useState(false);
 
 	const onClickListItem = (i: SortItem) => {
@@ -84,7 +82,7 @@ export const SortP: React.FC = () => {
 					onClick={() => {
 						setOpen(!open);
 					}}>
-					{sort.name}
+					{value.name}
 				</span>
 			</div>
 			{open && (
@@ -95,7 +93,7 @@ export const SortP: React.FC = () => {
 								key={obj.name}
 								onClick={() => onClickListItem(obj)}
 								className={
-									sort.sortProperty === obj.sortProperty
+									value.sortProperty === obj.sortProperty
 										? 'active'
 										: ''
 								}>
@@ -110,4 +108,4 @@ export const SortP: React.FC = () => {
 			)}
 		</div>
 	);
-};
+});
