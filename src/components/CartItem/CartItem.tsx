@@ -4,8 +4,8 @@ import {
 	addItem,
 	removeOneItem,
 	removeItem,
-	CartItem,
-} from '../../redux/slices/cartSlice';
+} from '../../redux/slices/cartSlice/cartSlice';
+import { CartItem } from '../../redux/slices/cartSlice/types';
 import clsx from 'clsx';
 
 type CartItemProps = {

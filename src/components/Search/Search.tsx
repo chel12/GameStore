@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useRef } from 'react';
-import { setSearchValue } from '../../redux/slices/filterSlice';
+import { setSearchValue } from '../../redux/slices/filterSlice/filterSlice';
 import debounce from 'lodash.debounce';
 import styles from './Search.module.scss';
 import { useDispatch } from 'react-redux';

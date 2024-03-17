@@ -6,22 +6,18 @@ import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 import { GameBlock } from '../components/GameBlock/GameBlock';
 import GameBlockSkeleton from '../components/GameBlock/GameBlockSkeleton';
-
 import Pagination from '../components/Pagination/Pagination';
-
 import { useSelector } from 'react-redux';
 import {
 	setCategoryId,
 	setPageCount,
 	setFilters,
-	selectFilter,
-} from '../redux/slices/filterSlice';
+} from '../redux/slices/filterSlice/filterSlice';
+import { selectFilter } from '../redux/slices/filterSlice/selectors';
 
-import {
-	SearchGameParams,
-	fetchGames,
-	selectGameData,
-} from '../redux/slices/gameSlice';
+import { fetchGames } from '../redux/slices/gameSlice/asyncActions';
+import { selectGameData } from '../redux/slices/gameSlice/selectors';
+import { SearchGameParams } from '../redux/slices/gameSlice/types';
 import { useAppDispatch } from '../redux/store';
 
 const Home: React.FC = () => {

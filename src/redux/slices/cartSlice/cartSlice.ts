@@ -1,30 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { getCartFromLS } from '../../../utils/getCartFromLS';
+import { calcTotalPrice } from '../../../utils/calcTotalPrice';
+import { CartItem, CartSliceState } from './types';
 
-export type CartItem = {
-	id: string;
-	title: string;
-	price: number;
-	imgUrl: string;
-	type: string;
-	edition: string;
-	count: number;
-};
-
-interface CartSliceState {
-	totalPrice: number;
-	items: CartItem[];
-}
-
-const initialState: CartSliceState = {
-	totalPrice: 0,
-	items: [],
-};
+const initialState: CartSliceState = getCartFromLS();
 
 export const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
 	reducers: {
+		//добавить 1 кол-во
 		addItem(state, action: PayloadAction<CartItem>) {
 			const findItem = state.items.find(
 				(obj) => obj.id === action.payload.id
@@ -34,11 +19,9 @@ export const cartSlice = createSlice({
 			} else {
 				state.items.push({ ...action.payload, count: 1 });
 			}
-			state.totalPrice = state.items.reduce((sum, obj) => {
-				return obj.price * obj.count + sum;
-			}, 0);
+			state.totalPrice = calcTotalPrice(state.items);
 		},
-
+		//удалить 1 кол-во
 		removeOneItem(state, action: PayloadAction<string>) {
 			//найди обьект с таким же id
 			const findItem = state.items.find(
@@ -47,8 +30,10 @@ export const cartSlice = createSlice({
 			//если правда то сделай -1 count
 			if (findItem) {
 				findItem.count--;
+				state.totalPrice = state.totalPrice - findItem.price;
 			}
 		},
+		//удалить товар с корзины
 		removeItem(state, action: PayloadAction<string>) {
 			state.items = state.items.filter(
 				(obj) => obj.id !== action.payload
@@ -60,12 +45,6 @@ export const cartSlice = createSlice({
 		},
 	},
 });
-
-//селекторы
-export const selectCart = (state: RootState) => state.cart;
-
-export const selectCartItemId = (id: string) => (state: RootState) =>
-	state.cart.items.find((obj) => obj.id === id);
 
 // Action creators are generated for each case reducer function
 export const { addItem, removeItem, clearItems, removeOneItem } =

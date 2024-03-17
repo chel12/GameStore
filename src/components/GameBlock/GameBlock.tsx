@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	CartItem,
-	addItem,
-	selectCartItemId,
-} from '../../redux/slices/cartSlice';
+import { CartItem } from '../../redux/slices/cartSlice/types';
+import { addItem } from '../../redux/slices/cartSlice/cartSlice';
+import { selectCartItemId } from '../../redux/slices/cartSlice/selectors';
 import { Link } from 'react-router-dom';
 
 export type GameBlockProps = {

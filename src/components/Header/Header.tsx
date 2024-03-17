@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search } from '../Search/Search';
 import { useSelector } from 'react-redux';
-import { selectCart } from '../../redux/slices/cartSlice';
+import { selectCart } from '../../redux/slices/cartSlice/selectors';
 
 export const Header: React.FC = () => {
 	const { items, totalPrice } = useSelector(selectCart);
 	const totalCount = items.reduce((sum: number, obj: any) => {
 		return obj.count + sum;
 	}, 0);
+
+	//состояние для localStorage
+	const isMounted = useRef(false);
+
 	const location = useLocation();
+
+	useEffect(() => {
+		if (isMounted.current) {
+			//если меняется items, пихай его в json строку
+			const json = JSON.stringify(items);
+			localStorage.setItem('cart', json);
+			//локал стор установи себе ключ 'cart', с значением json
+			//в котором будет items в формате json
+		}
+		isMounted.current = true;
+	}, [items]);
 
 	return (
 		<div className="header">
@@ -23,7 +38,8 @@ export const Header: React.FC = () => {
 						</div>
 					</div>
 				</Link>
-				<Search />
+				{location.pathname !== '/cart' && <Search />}
+
 				<Link to="/cart">
 					<div className="header__cart">
 						{location.pathname !== '/cart' && (
