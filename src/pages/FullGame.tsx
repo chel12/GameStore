@@ -3,6 +3,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const FullGame: React.FC = () => {
 	//достаем id, вернет значение ещё
@@ -42,6 +43,11 @@ const FullGame: React.FC = () => {
 			<img src={game.imgUrl} alt="" />
 			<h2>{game.title}</h2>
 			<h4>{game.price}</h4>
+			<Link to="/">
+				<button className="button button--outline button--add">
+					<span>Назад</span>
+				</button>
+			</Link>
 		</div>
 	);
 };
