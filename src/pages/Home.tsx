@@ -38,7 +38,6 @@ const Home: React.FC = () => {
 	const dispatch = useAppDispatch();
 
 	//сортировка
-
 	const onChangeCategory = useCallback((id: number) => {
 		dispatch(setCategoryId(id));
 	}, []);
@@ -59,18 +58,41 @@ const Home: React.FC = () => {
 		window.scroll(0, 0);
 	};
 
-	//вытащить теперь строку из url и перевести её в обьект
+	//! url формирует
+	useEffect(() => {
+		//! проверка был ли рендер ранее
+		if (isMounted.current) {
+			//!создать url
+			const queryString = qs.stringify({
+				sortProperty: sort.sortProperty,
+				categoryId,
+			});
+
+			//!перейти по урлу
+			console.log(queryString);
+			navigate(`?${queryString}`);
+		}
+		//чтобы при первом рендере не рендерил тоже
+		isMounted.current = true;
+	}, [categoryId, sort.sortProperty]);
+
+	//
+
+	//!вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
 		if (window.location.search) {
-			//получить из URL обьект
+			//получить из URL обьект substring(1)уберет '?' так как нельзя в обьект его
 			const params = qs.parse(
 				window.location.search.substring(1)
 			) as unknown as SearchGameParams;
+
+			//сортировка
 			const sort = sortList.find(
+				//пробежаться по каждому обьекту и вернуть то что совпадает с url
 				(obj) => obj.sortProperty === params.sortBy
 			);
-			//после получения URL,отправляем в Redux запрос и устанавливаем фильтр
-			dispatch(
+			//!после получения URL,отправляем в Redux запрос и устанавливаем фильтр
+			const b = dispatch(
 				setFilters({
 					searchValue: params.search,
 					categoryId: Number(params.category),
@@ -78,10 +100,12 @@ const Home: React.FC = () => {
 					currentPage,
 				})
 			);
+			console.log(b);
 			isSearch.current = true;
 		}
 	}, []);
 
+	//! если был первый рендер, тогда запрашиваем пиццы
 	useEffect(() => {
 		window.scrollTo(0, 0);
 		if (!isSearch.current) {
@@ -89,18 +113,6 @@ const Home: React.FC = () => {
 		}
 		isSearch.current = false;
 	}, [categoryId, sort.sortProperty, searchValue]);
-
-	//url формирует
-	useEffect(() => {
-		if (isMounted.current) {
-			const queryString = qs.stringify({
-				sortProperty: sort.sortProperty,
-				categoryId,
-			});
-			navigate(`?${queryString}`);
-		}
-		isMounted.current = true;
-	}, [categoryId, sort.sortProperty]);
 
 	const skeletonLoader = [...new Array(8)].map((_, index) => (
 		<GameBlockSkeleton key={index} />
