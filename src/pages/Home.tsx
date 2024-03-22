@@ -67,16 +67,22 @@ const Home: React.FC = () => {
 				sortProperty: sort.sortProperty,
 				categoryId,
 			});
-
-			//!перейти по урлу
 			console.log(queryString);
+			//!перейти по урлу
 			navigate(`?${queryString}`);
 		}
 		//чтобы при первом рендере не рендерил тоже
 		isMounted.current = true;
 	}, [categoryId, sort.sortProperty]);
 
-	//
+	//! если был первый рендер, тогда запрашиваем игры
+	useEffect(() => {
+		window.scrollTo(0, 0);
+		if (!isSearch.current) {
+			getGames();
+		}
+		isSearch.current = false;
+	}, [categoryId, sort.sortProperty, searchValue]);
 
 	//!вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
@@ -85,34 +91,24 @@ const Home: React.FC = () => {
 			const params = qs.parse(
 				window.location.search.substring(1)
 			) as unknown as SearchGameParams;
-
+			console.log(params);
 			//сортировка
 			const sort = sortList.find(
 				//пробежаться по каждому обьекту и вернуть то что совпадает с url
 				(obj) => obj.sortProperty === params.sortBy
 			);
 			//!после получения URL,отправляем в Redux запрос и устанавливаем фильтр
-			const b = dispatch(
+			dispatch(
 				setFilters({
 					searchValue: params.search,
-					categoryId: Number(params.category),
+					categoryId: parseInt(params.category),
 					sort: sort || sortList[0],
 					currentPage,
 				})
 			);
-			console.log(b);
-			isSearch.current = true;
 		}
+		isSearch.current = true;
 	}, []);
-
-	//! если был первый рендер, тогда запрашиваем пиццы
-	useEffect(() => {
-		window.scrollTo(0, 0);
-		if (!isSearch.current) {
-			getGames();
-		}
-		isSearch.current = false;
-	}, [categoryId, sort.sortProperty, searchValue]);
 
 	const skeletonLoader = [...new Array(8)].map((_, index) => (
 		<GameBlockSkeleton key={index} />
