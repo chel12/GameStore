@@ -50,42 +50,37 @@ const Home: React.FC = () => {
 	//отдельная функция для избежания дабл рендеринга
 	const getGames = async () => {
 		const sortBy = sort.sortProperty;
-		const category = categoryId > 0 ? `category=${categoryId}` : '';
+		const category = categoryId > 0 ? `&category=${categoryId}` : '';
 		const search = searchValue ? `&title=*${searchValue}` : '';
 
 		dispatch(fetchGames({ sortBy, category, search }));
-
 		window.scroll(0, 0);
 	};
 
 	//! url формирует
 	useEffect(() => {
-		//! проверка был ли рендер ранее
+		console.log('Урл формирует');
+
+		// проверка был ли рендер ранее
 		if (isMounted.current) {
-			//!создать url
+			//создать url
 			const queryString = qs.stringify({
 				sortProperty: sort.sortProperty,
 				categoryId,
 			});
 			console.log(queryString);
-			//!перейти по урлу
+
+			//перейти по урлу
 			navigate(`?${queryString}`);
 		}
+
 		//чтобы при первом рендере не рендерил тоже
 		isMounted.current = true;
 	}, [categoryId, sort.sortProperty]);
 
-	//! если был первый рендер, тогда запрашиваем игры
+	//вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
-		window.scrollTo(0, 0);
-		if (!isSearch.current) {
-			getGames();
-		}
-		isSearch.current = false;
-	}, [categoryId, sort.sortProperty, searchValue]);
-
-	//!вытащить теперь строку из url и перевести её в обьект
-	useEffect(() => {
+		console.log('получить строку и диспатч');
 		if (window.location.search) {
 			//получить из URL обьект substring(1)уберет '?' так как нельзя в обьект его
 			const params = qs.parse(
@@ -95,13 +90,13 @@ const Home: React.FC = () => {
 			//сортировка
 			const sort = sortList.find(
 				//пробежаться по каждому обьекту и вернуть то что совпадает с url
-				(obj) => obj.sortProperty === params.sortBy
+				(obj) => obj.sortProperty == params.sortBy
 			);
-			//!после получения URL,отправляем в Redux запрос и устанавливаем фильтр
+			//после получения URL,отправляем в Redux запрос и устанавливаем фильтр
 			dispatch(
 				setFilters({
 					searchValue: params.search,
-					categoryId: parseInt(params.category),
+					categoryId: Number(params.category),
 					sort: sort || sortList[0],
 					currentPage,
 				})
@@ -109,6 +104,15 @@ const Home: React.FC = () => {
 		}
 		isSearch.current = true;
 	}, []);
+	//! если был первый рендер, тогда запрашиваем игры
+	useEffect(() => {
+		console.log('получить игры из урла');
+		window.scrollTo(0, 0);
+		if (!isSearch.current) {
+			getGames();
+		}
+		isSearch.current = false;
+	}, [categoryId, sort.sortProperty, searchValue]);
 
 	const skeletonLoader = [...new Array(8)].map((_, index) => (
 		<GameBlockSkeleton key={index} />

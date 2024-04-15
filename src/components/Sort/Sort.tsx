@@ -1,36 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setSort } from '../../redux/slices/filterSlice/filterSlice';
-import { Sort, SortPropertyEnum } from '../../redux/slices/filterSlice/types';
+import {
+	Sort,
+	SortPropertyEnum,
+	SortPropertyNameEnum,
+} from '../../redux/slices/filterSlice/types';
 type SortPProps = { value: Sort };
 type SortItem = {
-	name: string;
+	name: SortPropertyNameEnum;
 	sortProperty: SortPropertyEnum;
 };
 
 export const sortList: SortItem[] = [
 	{
-		name: `популярности ˄`,
+		name: SortPropertyNameEnum.RATING_DESC_Name_DESC,
 		sortProperty: SortPropertyEnum.RATING_DESC,
 	},
 	{
-		name: `популярности ˅`,
+		name: SortPropertyNameEnum.RATING_DESC_Name_ASC,
 		sortProperty: SortPropertyEnum.RATING_ASC,
 	},
 	{
-		name: 'алфавиту ˄',
+		name: SortPropertyNameEnum.TITLE_Name_DESC,
 		sortProperty: SortPropertyEnum.TITLE_DESC,
 	},
 	{
-		name: 'алфавиту ˅',
+		name: SortPropertyNameEnum.TITLE_Name_ASC,
 		sortProperty: SortPropertyEnum.TITLE_ASC,
 	},
 	{
-		name: 'цене ˄',
+		name: SortPropertyNameEnum.PRICE_Name_DESC,
 		sortProperty: SortPropertyEnum.PRICE_DESC,
 	},
 	{
-		name: 'цене ˅',
+		name: SortPropertyNameEnum.PRICE_Name_ASC,
 		sortProperty: SortPropertyEnum.PRICE_ASC,
 	},
 ];

@@ -5,13 +5,13 @@ export type SearchGameParams = {
 };
 
 export type Game = {
-	id: string;
+	id: number;
 	imgUrl: string;
 	title: string;
 	types: string[];
 	editions: string[];
 	price: number;
-	category: string;
+	category: number;
 	rating: number;
 };
 export enum Status {
