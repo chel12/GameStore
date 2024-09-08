@@ -14,7 +14,6 @@ import {
 	setFilters,
 } from '../redux/slices/filterSlice/filterSlice';
 import { selectFilter } from '../redux/slices/filterSlice/selectors';
-
 import { fetchGames } from '../redux/slices/gameSlice/asyncActions';
 import { selectGameData } from '../redux/slices/gameSlice/selectors';
 import { SearchGameParams } from '../redux/slices/gameSlice/types';
@@ -33,6 +32,7 @@ const Home: React.FC = () => {
 	const { categoryId, sort, currentPage, searchValue } =
 		useSelector(selectFilter);
 	const { items, status } = useSelector(selectGameData);
+	
 
 	//диспатч
 	const dispatch = useAppDispatch();
@@ -59,8 +59,6 @@ const Home: React.FC = () => {
 
 	//! url формирует
 	useEffect(() => {
-		console.log('Урл формирует');
-
 		// проверка был ли рендер ранее
 		if (isMounted.current) {
 			//создать url
@@ -68,8 +66,7 @@ const Home: React.FC = () => {
 				sortProperty: sort.sortProperty,
 				categoryId,
 			});
-			console.log(queryString);
-
+			console.log('Формирует URL', queryString);
 			//перейти по урлу
 			navigate(`?${queryString}`);
 		}
@@ -80,18 +77,19 @@ const Home: React.FC = () => {
 
 	//вытащить теперь строку из url и перевести её в обьект
 	useEffect(() => {
-		console.log('получить строку и диспатч');
 		if (window.location.search) {
 			//получить из URL обьект substring(1)уберет '?' так как нельзя в обьект его
 			const params = qs.parse(
 				window.location.search.substring(1)
 			) as unknown as SearchGameParams;
-			console.log(params);
+
+			console.log('Парсим строку', params);
 			//сортировка
 			const sort = sortList.find(
 				//пробежаться по каждому обьекту и вернуть то что совпадает с url
-				(obj) => obj.sortProperty == params.sortBy
+				(obj) => obj.sortProperty === params.sortBy
 			);
+			console.log(sort);
 			//после получения URL,отправляем в Redux запрос и устанавливаем фильтр
 			dispatch(
 				setFilters({
@@ -106,7 +104,7 @@ const Home: React.FC = () => {
 	}, []);
 	//! если был первый рендер, тогда запрашиваем игры
 	useEffect(() => {
-		console.log('получить игры из урла');
+		console.log('Загрузка игр');
 		window.scrollTo(0, 0);
 		if (!isSearch.current) {
 			getGames();

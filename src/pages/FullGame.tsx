@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
+
+
 const FullGame: React.FC = () => {
 	//достаем id, вернет значение ещё
 	const { id } = useParams();
@@ -39,10 +41,10 @@ const FullGame: React.FC = () => {
 	}
 
 	return (
-		<div className="container">
+		<div className='container--full'>
 			<img src={game.imgUrl} alt="" />
 			<h2>{game.title}</h2>
-			<h4>{game.price}</h4>
+			<h4>{game.price} р.</h4>
 			<Link to="/">
 				<button className="button button--outline button--add">
 					<span>Назад</span>

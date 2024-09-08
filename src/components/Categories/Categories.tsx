@@ -15,15 +15,6 @@ const categories = [
 ];
 export const Categories: React.FC<CategoriesProps> = React.memo(
 	({ categoryId, onChangeCategory }) => {
-		// const onClickCategory = (index) => {  вариант для сложных
-		// 	setActiveIndex(index);
-		//   ...
-		//   ...
-		// };
-
-		//setActiveIndex(index) лайт варик для простого
-
-	
 
 		return (
 			<div className="categories">

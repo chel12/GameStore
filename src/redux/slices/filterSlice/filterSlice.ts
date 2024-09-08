@@ -34,8 +34,8 @@ export const filterSlice = createSlice({
 		},
 
 		setFilters(state, action: PayloadAction<FilterSliceState>) {
-			state.currentPage = Number(action.payload.currentPage);
-			state.categoryId = Number(action.payload.categoryId);
+			state.currentPage = action.payload.currentPage;
+			state.categoryId = action.payload.categoryId;
 			state.sort = action.payload.sort;
 		},
 	},
